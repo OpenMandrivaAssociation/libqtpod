@@ -1,17 +1,16 @@
-%define lib_major       0
-%define lib_name_orig   %mklibname qtpod
-%define lib_name        %{lib_name_orig}%{lib_major}
+%define lib_name_orig   %{mklibname qtpod}
+%define lib_name        %{mklibname qtpod 0}
+%define lib_name_devel  %{mklibname qtpod -d}
 
 Summary:        Provides access to the contents of an Apple iPod
 Name:           libqtpod
-Version:        0.3
-Release:        %mkrel 3
+Version:        0.4.0
+Release:        %mkrel 1
 Epoch:          0
-URL:            http://sourceforge.net/projects/kpod/
-Source0:        http://umn.dl.sourceforge.net/sourceforge/kpod/libqtpod-%{version}.tar.bz2
 License:        LGPL
 Group:          System/Libraries
-BuildRequires:  doxygen
+URL:            http://sourceforge.net/projects/kpod/
+Source0:        http://osdn.dl.sourceforge.net/sourceforge/kpod/libqtpod-%{version}.tar.bz2
 BuildRequires:  qt3-devel
 Buildroot:      %{_tmppath}/%{name}-%{version}-%{release}-root
 
@@ -29,31 +28,31 @@ Group:          System/Libraries
 The %{name} package contains the libraries needed to run programs dynamically 
 linked with the libqtpod library.
 
-%package -n %{lib_name}-devel
+%package -n %{lib_name_devel}
 Group:           Development/C++
 Summary:         Shared libraries and header files for the libqtpod library
-Provides:        %{name}-devel
-Provides:        %{lib_name_orig}-devel
-Requires:        %{lib_name} = %{epoch}:%{version}
+Provides:        qtpod-devel = %{epoch}:%{version}-%{release}
+Requires:        %{lib_name} = %{epoch}:%{version}-%{release}
+Obsoletes:       %{mklibname qtpod 0}-devel < %{epoch}:%{version}-%{release}
 
-%description -n %{lib_name}-devel
+%description -n %{lib_name_devel}
 The %{name} package contains the shared libraries and header files 
 needed for developing libqtpod applications.
 
 %prep
 %setup -q
 %{__perl} -pi -e 's/^target\.path = .*$/target.path = \$(libdir)/' src/src.pro
-%{__perl} -pi -e 's/^OUTPUT_DIRECTORY.*=.*$/OUTPUT_DIRECTORY = docs/;' -e 's/^INPUT.*=.*$/INPUT = src/' Doxyfile
 
 %build
-export QTDIR=%{_prefix}/lib/qt3
-%{_bindir}/qmake
+export QTDIR=%{qt3dir}
+${QTDIR}/bin/qmake
+export PATH=${QTDIR}/bin:${PATH}
 %{__make} CXXFLAGS="%{optflags} -fPIC"
-%{_bindir}/doxygen
 
 %install
 %{__rm} -rf %{buildroot}
 %{__make} install INSTALL_ROOT=%{buildroot} libdir=%{_libdir}
+
 %{__mkdir_p} %{buildroot}%{_includedir}
 %{__mv} %{buildroot}/libqtpod %{buildroot}%{_includedir}
 
@@ -65,14 +64,12 @@ export QTDIR=%{_prefix}/lib/qt3
 %postun -n %{lib_name} -p /sbin/ldconfig
 
 %files -n %{lib_name}
-%defattr(-,root,root)
+%defattr(-,root,root,0755)
 %doc Changelog COPYING INSTALL README
 %{_libdir}/*.so.*
 
-%files -n %{lib_name}-devel
-%defattr(-,root,root)
+%files -n %{lib_name_devel}
+%defattr(-,root,root,0755)
 %doc docs
 %{_includedir}/%{name}
 %{_libdir}/*.so
-
-
