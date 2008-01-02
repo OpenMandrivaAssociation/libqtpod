@@ -12,6 +12,7 @@ Group:          System/Libraries
 URL:            http://sourceforge.net/projects/kpod/
 Source0:        http://downloads.sourceforge.net/sourceforge/kpod/libqtpod-%{version}.tar.bz2
 BuildRequires:  qt3-devel
+Buildroot:      %{_tmppath}/%{name}-%{version}-%{release}-root
 
 %description
 LibQtPod provides access to the contents of an Apple iPod. The code was
