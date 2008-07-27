@@ -5,7 +5,7 @@
 Summary:        Provides access to the contents of an Apple iPod
 Name:           libqtpod
 Version:        0.4.1
-Release:        %mkrel 1
+Release:        %mkrel 3
 Epoch:          0
 License:        LGPL
 Group:          System/Libraries
