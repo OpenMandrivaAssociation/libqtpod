@@ -9,7 +9,7 @@ Release:        %mkrel 4
 Epoch:          0
 License:        LGPL
 Group:          System/Libraries
-URL:            http://sourceforge.net/projects/kpod/
+URL:            https://sourceforge.net/projects/kpod/
 Source0:        http://downloads.sourceforge.net/sourceforge/kpod/libqtpod-%{version}.tar.bz2
 BuildRequires:  qt3-devel
 Buildroot:      %{_tmppath}/%{name}-%{version}-%{release}-root
